@@ -1,0 +1,21 @@
+<div class="container-fluid" ng-controller = "NavCtrl as nav">
+	<div class="navbar-header">
+          <a class="navbar-brand" href="kabacademy.com">
+			<img src="app/images/logo_top.png" alt="Logo"/>
+		  </a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+		
+	</div>
+  <div class="navbar-inner">
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li ng-repeat="navItem in nav.navList"><a target="_blank" href="{{navItem.url}}">{{navItem.title}}</a></li>
+			</ul>
+		</div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="mailChimpForm" ng-include="'app/views/mailChimpForm.tpl.html'"></div>
+<div class="clearfix footerWebinarNav" ng-controller="FooterCtrl as footer">
+	<div class="container">
+		<div class="row">			
+			<div ng-repeat="navRow in footer.navData" class="clearfix col-sm-3 col-xs-12 navRow">
+		  		<h4>{{navRow.title}}&nbsp;</h4>
+		  		<a href="{{itemLink.url}}" ng-repeat="itemLink in navRow.linkList">{{itemLink.title}}</a>
+			</div>
+		</div>
+	</div>
+</div>

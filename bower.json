@@ -1,0 +1,11 @@
+{
+  "name": "webinar",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "davgur <davgur.ru@gmail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": ""
+}

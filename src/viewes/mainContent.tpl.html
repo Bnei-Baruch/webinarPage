@@ -1,0 +1,81 @@
+<div ng-controller="MainCtrl as main"  class="row">
+	<div ng-if="main.isLive" class="col-md-12">
+		<div class="well white clearfix titleWrapper">
+			<h3>
+				<span class="label label-info">тема вебинара</span>
+				{{main.currentClip.snippet.title}}
+			</h3>
+			<h5>
+				<span class="label label-primary">дата и время</span>
+				{{main.currentClip.startIn | date: 'd MMMM, HH:mm'}}
+			</h5>
+		</div>
+	</div>
+
+  	<div class="col-md-8">
+  		<div class=" well blue clearfix">
+	  		<div ng-class="main.isLive ? 'col-sm-12': 'col-sm-9'" class="col-xs-12">
+		      	<div class="embed-responsive embed-responsive-16by9">
+		      		<div id="player" class="embed-responsive-item">
+					</div>
+		      	</div>
+	  		</div>
+	      	<div class="col-sm-3 col-xs-12 playList" ng-if="!main.isLive">
+	      		<div>
+	      			Вебинары
+	      			<span>
+	      				{{main.currentClip.$index}}
+	      				/
+	      				{{::main.playList.pageInfo.totalResults}}
+      				</span>
+	      			<div class="arrows">
+	      				<button 
+	      					class="glyphicon glyphicon-arrow-left" 
+	      					ng-click="main.loadPage(main.playList.prevPageToken, -1);" 
+	      					ng-disabled="!main.playList.prevPageToken"
+	      					ng-class="(!main.playList.prevPageToken) ? 'disabled' : '';"></button>
+	      				<button 
+	      					class="glyphicon glyphicon-arrow-right" 
+	      					ng-click="main.loadPage(main.playList.nextPageToken, 1);"
+	      					ng-disabled="!main.playList.nextPageToken"
+	      					ng-class="(!main.playList.nextPageToken) ? 'disabled' : '';"></button>
+	      			</div>
+	  			</div>
+	      		<div class="media" ng-repeat="clip in main.playList.items"  ng-click="main.openClip(clip, $index)" ng-class="clip.id == main.currentClip.id ? 'selected' : '';">
+	      			<div class="media-left media-middle">
+							<img class="media-object"
+								ng-src="{{clip.snippet.thumbnails.default.url}}" 
+								alt="{{clip.snippet.title}}">
+				  	</div>
+				  	<div class="media-body  media-middle">
+				    	<p>{{clip.snippet.title}}</p>
+				  	</div>
+				</div>
+	      	</div>
+  		</div>
+      	<div class="row registerBtns" >      		
+      		<div  class="col-sm-4 col-xs-12">      			
+				<a class="btn-block btn-primary btn-lg" href="http://kabacademy.com/course/osnovyi-kabbalyi-zima-2016/">
+					<span class="btnIcon online"></span>
+					Записаться на онлайн-курс
+				</a>
+			</div>
+      		<div  class="col-sm-4 col-xs-12">      			
+				<a class="btn-block btn-primary btn-lg" href="http://kabacademy.com/filialyi/">
+					<span class="btnIcon filialyi"></span>
+					Записаться на очное обучение
+				</a>
+			</div>
+			<div  class="col-sm-4 col-xs-12">      			
+				<a class="btn-block btn-primary btn-lg"
+				 	target="_blank" href="https://docs.google.com/forms/d/1lq-8Je61hN57RrexJYWjCq2lgFXxbRQDZJknDvFnPoE/viewform">
+					<span class="btnIcon ask"></span>
+					Задать вопрос М.Лайтману
+				</a>
+      		</div>
+      	</div>
+  	</div>
+  	<div class="col-md-4">			
+			<div id="hypercomments_widget" ng-init="main.addHypercomments()"></div>
+	</div>
+</div>
