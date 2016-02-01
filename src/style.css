@@ -94,9 +94,10 @@ img{max-width: inherit;}
 body{background: #f3f3f3 url("../images/bg.jpg") 50% 120px no-repeat; min-width: 360px;font-family: 'Open Sans', sans-serif;}
 .disabled{opacity: 0.5;}
 
-.well.blue{background-color: rgb(215, 239, 253);}
+.well.blue{background-color: rgb(215, 239, 253); padding-left: 5px; padding-right: 5px;}
 .well.white{background-color: white;}
 
+.playList {font-size: 12px;}
 .playList .media {background-color: #55B3E0; cursor: pointer;}
 .playList .media.selected {opacity: 0.5;}
 .playList .media .media-object{width: 62px;}
