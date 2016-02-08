@@ -1,12 +1,21 @@
 (function (app) {
 	app.service('UtilitiesSVC', UtilitiesSVC);
-	UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout"];
+	UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout", "$http"];
 
-	function UtilitiesSVC (YoutubeSVC, $timeout) {
+	function UtilitiesSVC (YoutubeSVC, $timeout, $http) {
 		return {
 			addHypercomments: addHypercomments,
-			buildPlayer: buildPlayer
+			buildPlayer: buildPlayer,
+			getConfig: getConfig
 		};
+		function getConfig () {
+			var param = {
+				method: "POST",
+				url: "app/config.json"
+			}
+			return $http(param);
+		}
+
 		function addHypercomments () {
 			window._hcwp = window._hcwp || [];
 		    window._hcwp.push({

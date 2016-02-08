@@ -9,15 +9,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "del": "",
     "gulp-autoprefixer": "",
     "gulp-cache": "",
     "gulp-concat": "",
     "gulp-cssnano": "",
     "gulp-imagemin": "",
+    "gulp-jshint": "^2.0.0",
     "gulp-livereload": "",
+    "gulp-ng-config": "^1.2.1",
     "gulp-notify": "",
     "gulp-rename": "",
     "gulp-uglify": "",
-    "del": ""
+    "jshint": "^2.9.1"
   }
 }

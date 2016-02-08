@@ -1,12 +1,12 @@
 (function (app) {
 	//temparery param of started webinar date (year, month, date, hours, minutes)
 	var _tempDateParam = new Date(2016, 0, 24, 17);
-	_tempDateParam = new Date(
+	/*_tempDateParam = new Date(
 	 	_tempDateParam.getUTCFullYear(), 
 	 	_tempDateParam.getUTCMonth(), 
 	 	_tempDateParam.getUTCDate(),  
 	 	_tempDateParam.getUTCHours()
- 	);
+ 	);*/
 	app.controller('MainCtrl', Controller);
 	Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC"];
 	
@@ -18,16 +18,16 @@
 		vm.setLive = setLive;
 		vm.isLive = false;
 		vm.addHypercomments = UtilitiesSVC.addHypercomments();
-		/*YoutubeSVC.getLiveData().then(function (r) {
-			var a  = r;
-		});*/
 		return vm;
 		function setLive (live, id) {
 			vm.isLive = (live === "true");
 			if (vm.isLive) 
 				YoutubeSVC.getVideoById(id).then(function(r){
 					vm.currentClip = r.data.items[0];
-					vm.currentClip.startIn = _tempDateParam;
+					UtilitiesSVC.getConfig().then(function(r){
+						var d = r.webinarDate;
+						vm.currentClip.startIn = new Date(d.year, d.month, d.day, d.hour);
+					});
 				});	
 			else
 				loadPage(null, 0, 0);

@@ -135,13 +135,22 @@
 
 (function (app) {
 	app.service('UtilitiesSVC', UtilitiesSVC);
-	UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout"];
+	UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout", "$http"];
 
-	function UtilitiesSVC (YoutubeSVC, $timeout) {
+	function UtilitiesSVC (YoutubeSVC, $timeout, $http) {
 		return {
 			addHypercomments: addHypercomments,
-			buildPlayer: buildPlayer
+			buildPlayer: buildPlayer,
+			getConfig: getConfig
 		};
+		function getConfig () {
+			var param = {
+				method: "POST",
+				url: "app/config.json"
+			}
+			return $http(param);
+		}
+
 		function addHypercomments () {
 			window._hcwp = window._hcwp || [];
 		    window._hcwp.push({
@@ -346,12 +355,12 @@
 (function (app) {
 	//temparery param of started webinar date (year, month, date, hours, minutes)
 	var _tempDateParam = new Date(2016, 0, 24, 17);
-	_tempDateParam = new Date(
+	/*_tempDateParam = new Date(
 	 	_tempDateParam.getUTCFullYear(), 
 	 	_tempDateParam.getUTCMonth(), 
 	 	_tempDateParam.getUTCDate(),  
 	 	_tempDateParam.getUTCHours()
- 	);
+ 	);*/
 	app.controller('MainCtrl', Controller);
 	Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC"];
 	
@@ -369,10 +378,17 @@
 		return vm;
 		function setLive (live, id) {
 			vm.isLive = (live === "true");
+			UtilitiesSVC.getConfig().then(function(r){
+				var d = r.data.webinarDate;
+				var a = new Date(d.year, d.month, d.day, d.hour);
+			});
 			if (vm.isLive) 
 				YoutubeSVC.getVideoById(id).then(function(r){
 					vm.currentClip = r.data.items[0];
-					vm.currentClip.startIn = _tempDateParam;
+					UtilitiesSVC.getConfig().then(function(r){
+						var d = r.webinarDate;
+						vm.currentClip.startIn = new Date(d.year, d.month, d.day, d.hour);
+					});
 				});	
 			else
 				loadPage(null, 0, 0);

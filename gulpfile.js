@@ -51,14 +51,21 @@ gulp.task('views', function() {
     .pipe(notify({ message: 'Views task complete' }));
 });
 
+// config
+gulp.task('config', function() {
+  return gulp.src('src/config.json')
+    .pipe(gulp.dest('app'))
+    .pipe(notify({ message: 'Configuration task complete' }));
+});
+
 // Clean
 gulp.task('clean', function() {
-  return del(['app/styles', 'app/scripts', 'app/images','app/views' ]);
+  return del(['app/styles', 'app/scripts', 'app/images','app/views', 'app/config.json' ]);
 });
 
 // Default task
 gulp.task('default', ['clean'], function() {
-  gulp.start('styles', 'views', 'scripts', 'images');
+  gulp.start('styles', 'views', 'scripts', 'images', 'config');
 });
 
 // Watch
