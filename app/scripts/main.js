@@ -6,12 +6,37 @@
 	 */
 	angular
 	.module('bbWebinar', [])
-	.config(function($httpProvider) {
-		
-    	//$httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
-
+	.run(function($rootScope, GetConfig) {
+		$rootScope.config = {};
+		GetConfig.getConfig().then(function(r){
+			var d = r.data.webinarDate;
+			var config = {
+				"clipStartIn": new Date(d.year, d.month, d.day, d.hour),
+				"pageTitle": r.data.pageTitle
+			};
+			angular.extend($rootScope.config , config);
+		});
 	})
 }());
+(function (app) {
+	app.service('GetConfig', GetConfig);
+	GetConfig.$inject = ["$http"];
+
+	function GetConfig ($http) {
+		return {
+			getConfig: getConfig
+		};
+		function getConfig () {
+			var param = {
+				method: "POST",
+				url: "app/config.json"
+			}
+			return $http(param);
+		}
+	}
+})(angular.module('bbWebinar'));
+
+
 (function (app) {
 	app.service('GetDataSVC', GetDataSVC);
 
@@ -137,19 +162,11 @@
 	app.service('UtilitiesSVC', UtilitiesSVC);
 	UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout", "$http"];
 
-	function UtilitiesSVC (YoutubeSVC, $timeout, $http) {
+	function UtilitiesSVC (YoutubeSVC, $timeout) {
 		return {
 			addHypercomments: addHypercomments,
-			buildPlayer: buildPlayer,
-			getConfig: getConfig
+			buildPlayer: buildPlayer
 		};
-		function getConfig () {
-			var param = {
-				method: "POST",
-				url: "app/config.json"
-			}
-			return $http(param);
-		}
 
 		function addHypercomments () {
 			window._hcwp = window._hcwp || [];
@@ -362,9 +379,9 @@
 	 	_tempDateParam.getUTCHours()
  	);*/
 	app.controller('MainCtrl', Controller);
-	Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC"];
+	Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC", "$rootScope"];
 	
-	function Controller (YoutubeSVC, UtilitiesSVC) {
+	function Controller (YoutubeSVC, UtilitiesSVC, $rootScope) {
 		var vm = this;
 		vm.pageCounter = 0, vm.currentClip = {}, vm.playList = [];
 		vm.loadPage = loadPage;
@@ -372,23 +389,13 @@
 		vm.setLive = setLive;
 		vm.isLive = false;
 		vm.addHypercomments = UtilitiesSVC.addHypercomments();
-		/*YoutubeSVC.getLiveData().then(function (r) {
-			var a  = r;
-		});*/
 		return vm;
 		function setLive (live, id) {
 			vm.isLive = (live === "true");
-			UtilitiesSVC.getConfig().then(function(r){
-				var d = r.data.webinarDate;
-				var a = new Date(d.year, d.month, d.day, d.hour);
-			});
 			if (vm.isLive) 
 				YoutubeSVC.getVideoById(id).then(function(r){
 					vm.currentClip = r.data.items[0];
-					UtilitiesSVC.getConfig().then(function(r){
-						var d = r.webinarDate;
-						vm.currentClip.startIn = new Date(d.year, d.month, d.day, d.hour);
-					});
+					vm.currentClip.startIn = $rootScope.config.clipStartIn;
 				});	
 			else
 				loadPage(null, 0, 0);

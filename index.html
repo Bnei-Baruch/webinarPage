@@ -4,7 +4,9 @@
 	<head>
   		<meta charset="utf-8">
   		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>ВЕБИНАР</title>
+
+		<title ng-bind="$root.config.pageTitle"></title>
+  		
   		<link rel="shortcut icon" href="./app/images/favicon.png" type="image/png">
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700,700italic&amp;subset=cyrillic,cyrillic-ext,latin,greek-ext,greek,vietnamese,latin-ext">
 		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -19,7 +21,6 @@
 		<script type="text/javascript" src = "https://www.youtube.com/iframe_api"></script>
 	</head>
 	<body>
-	
 		<div>	
 			<header class="navbar container" ng-include="'app/views/topNav.tpl.html'"></header>
 			<section class="mainContent container"  ng-include="'app/views/mainContent.tpl.html'"></section>

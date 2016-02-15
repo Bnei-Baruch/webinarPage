@@ -17,7 +17,6 @@
     "gulp-imagemin": "",
     "gulp-jshint": "^2.0.0",
     "gulp-livereload": "",
-    "gulp-ng-config": "^1.2.1",
     "gulp-notify": "",
     "gulp-rename": "",
     "gulp-uglify": "",

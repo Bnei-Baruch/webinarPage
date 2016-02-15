@@ -8,9 +8,9 @@
 	 	_tempDateParam.getUTCHours()
  	);*/
 	app.controller('MainCtrl', Controller);
-	Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC"];
+	Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC", "$rootScope"];
 	
-	function Controller (YoutubeSVC, UtilitiesSVC) {
+	function Controller (YoutubeSVC, UtilitiesSVC, $rootScope) {
 		var vm = this;
 		vm.pageCounter = 0, vm.currentClip = {}, vm.playList = [];
 		vm.loadPage = loadPage;
@@ -24,10 +24,7 @@
 			if (vm.isLive) 
 				YoutubeSVC.getVideoById(id).then(function(r){
 					vm.currentClip = r.data.items[0];
-					UtilitiesSVC.getConfig().then(function(r){
-						var d = r.webinarDate;
-						vm.currentClip.startIn = new Date(d.year, d.month, d.day, d.hour);
-					});
+					vm.currentClip.startIn = $rootScope.config.clipStartIn;
 				});	
 			else
 				loadPage(null, 0, 0);
