@@ -17,8 +17,13 @@
 		vm.openClip = openClip;
 		vm.setLive = setLive;
 		vm.isLive = false;
+		vm.initVideo = initVideo;
 		vm.addHypercomments = UtilitiesSVC.addHypercomments();
 		return vm;
+		
+		function initVideo() {
+		 	UtilitiesSVC.buildPlayer(); 
+		 } 
 		function setLive (live, id) {
 			vm.isLive = (live === "true");
 			if (vm.isLive) 

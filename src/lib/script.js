@@ -1,4 +1,4 @@
-
+	
 // JSONP callback function of youtube API /////////////
 (function (jQuery) {
 	window.youTubePlayer = {};

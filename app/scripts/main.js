@@ -37,228 +37,211 @@
 })(angular.module('bbWebinar'));
 
 
-(function (app) {
-	app.service('GetDataSVC', GetDataSVC);
+(function(app) {
+    app.service('GetDataSVC', GetDataSVC);
 
-	function GetDataSVC () {
-		return {
-			getFooterData: getFooterData,
-			getTopNav: getTopNav
-		};
+    function GetDataSVC() {
+        return {
+            getFooterData: getFooterData,
+            getTopNav: getTopNav
+        };
 
-		function getFooterData () {
-			return [{
-					"title": "Обучение",
-					"linkList": [
-						{
-							"title":  "Форматы обучения",
-							"url": "http://kabacademy.com/programm-online/"
-						}, 
-						{
-							"title":  "Самостоятельное обучение",
-							"url": "http://kabacademy.com/"
-						}, 
-						{
-							"title":  "Онлайн курсы",
-							"url": "http://kabacademy.com/programm-online/uznat-bolshe-ob-obuchenii-v-mak/"
-						}, 
-					
-						{
-							"title":  "Очное обучение",
-							"url": "http://kabacademy.com/filialyi/"
-						}
-					]						
-				},
-				{
-					"title": "",
-					"linkList": [
-						{
-							"title":  "Преподаватели",
-							"url": "http://kabacademy.com/nashi-prepodavateli/"
-						}, 
-						{
-							"title":  "Программа обучения",
-							"url": "http://kabacademy.com/?p=453"
-						}, 
-						{
-							"title":  "Сервисы для студентов",
-							"url": "http://kabacademy.com/?p=391"
-						}, 
-					
-						{
-							"title":  "Учебные материалы",
-							"url": "http://kabacademy.com/?p=388"
-						}
-					]						
-				},
-				{
-					"title": "О нас",
-					"linkList": [
-						{
-							"title":  "Что такое каббала",
-							"url": "http://kabacademy.com/nauka-kabbala/"
-						}, 
-						{
-							"title":  "Михаэль Лайтман",
-							"url": "http://kabacademy.com/about-us/dr-michael-laitman/"
-						}, 
-						{
-							"title":  "Каббалисты",
-							"url": "http://kabacademy.com/nauka-kabbala/kabbalistyi/"
-						}, 
-					
-						{
-							"title":  "Книги",
-							"url": "http://www.kbooks.ru/"
-						}
-					]						
-				},
-				{
-					"title": "Наши сайты",
-					"linkList": [
-						{
-							"title":  "Информационный портал",
-							"url": "http://www.kabbalah.info/rus/"
-						}, 
-						{
-							"title":  "Блог М.Лайтмана",
-							"url": "http://www.laitman.ru/"
-						}, 
-						{
-							"title":  "Каббала ТВ",
-							"url": "http://www.kab.tv/rus/"
-						}, 
-					
-						{
-							"title":  "Зоар ТВ",
-							"url": "http://www.zoar.tv/"
-						}
-					]						
-				}];
-		}
+        function getFooterData() {
+            return [{
+                "title": "Обучение",
+                "linkList": [{
+                        "title": "Форматы обучения",
+                        "url": "http://kabacademy.com/programm-online/"
+                    }, {
+                        "title": "Самостоятельное обучение",
+                        "url": "http://kabacademy.com/"
+                    }, {
+                        "title": "Онлайн курсы",
+                        "url": "http://kabacademy.com/programm-online/uznat-bolshe-ob-obuchenii-v-mak/"
+                    },
 
-		function getTopNav () {			
-			return [
-				{
-				"url": "http://kabacademy.com/programm-online/",
-				"title": "Как мы учимся?"
-				}, {
-				"url": "http://kabacademy.com/filialyi/",
-				"title": "Очное обучение"
-				}, {
-				"url": "http://kabacademy.com/programm-online/uznat-bolshe-ob-obuchenii-v-mak/",
-				"title": "On-line обучение"
-				}, {
-				"url": "http://www.kbooks.ru/katalog/list/120",
-				"title": "магазин книг"
-				}
-			];
-		}
-	}
+                    {
+                        "title": "Очное обучение",
+                        "url": "http://kabacademy.com/filialyi/"
+                    }
+                ]
+            }, {
+                "title": "",
+                "linkList": [{
+                        "title": "Преподаватели",
+                        "url": "http://kabacademy.com/nashi-prepodavateli/"
+                    }, {
+                        "title": "Программа обучения",
+                        "url": "http://kabacademy.com/?p=453"
+                    }, {
+                        "title": "Сервисы для студентов",
+                        "url": "http://kabacademy.com/?p=391"
+                    },
+
+                    {
+                        "title": "Учебные материалы",
+                        "url": "http://kabacademy.com/?p=388"
+                    }
+                ]
+            }, {
+                "title": "О нас",
+                "linkList": [{
+                        "title": "Что такое каббала",
+                        "url": "http://kabacademy.com/nauka-kabbala/"
+                    }, {
+                        "title": "Михаэль Лайтман",
+                        "url": "http://kabacademy.com/about-us/dr-michael-laitman/"
+                    }, {
+                        "title": "Каббалисты",
+                        "url": "http://kabacademy.com/nauka-kabbala/kabbalistyi/"
+                    },
+
+                    {
+                        "title": "Книги",
+                        "url": "http://www.kbooks.ru/"
+                    }
+                ]
+            }, {
+                "title": "Наши сайты",
+                "linkList": [{
+                        "title": "Информационный портал",
+                        "url": "http://www.kabbalah.info/rus/"
+                    }, {
+                        "title": "Блог М.Лайтмана",
+                        "url": "http://www.laitman.ru/"
+                    }, {
+                        "title": "Каббала ТВ",
+                        "url": "http://www.kab.tv/rus/"
+                    },
+
+                    {
+                        "title": "Зоар ТВ",
+                        "url": "http://www.zoar.tv/"
+                    }
+                ]
+            }];
+        }
+
+        function getTopNav() {
+            return [{
+                "url": "http://kabacademy.com/programm-online/",
+                "title": "Как мы учимся?"
+            }, {
+                "url": "http://kabacademy.com/filialyi/",
+                "title": "Очное обучение"
+            }, {
+                "url": "http://kabacademy.com/programm-online/uznat-bolshe-ob-obuchenii-v-mak/",
+                "title": "On-line обучение"
+            }, {
+                "url": "http://www.kbooks.ru/katalog/list/120",
+                "title": "магазин книг"
+            }];
+        }
+    }
 })(angular.module('bbWebinar'));
 
+(function(app) {
+    app.service('UtilitiesSVC', UtilitiesSVC);
+    UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout", "$http"];
 
-(function (app) {
-	app.service('UtilitiesSVC', UtilitiesSVC);
-	UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout", "$http"];
+    function UtilitiesSVC(YoutubeSVC, $timeout) {
+        return {
+            addHypercomments: addHypercomments,
+            buildPlayer: buildPlayer
+        };
 
-	function UtilitiesSVC (YoutubeSVC, $timeout) {
-		return {
-			addHypercomments: addHypercomments,
-			buildPlayer: buildPlayer
-		};
+        function addHypercomments() {
+            window._hcwp = window._hcwp || [];
+            window._hcwp.push({
+                widget: "Stream",
+                widget_id: 68039
+            });
 
-		function addHypercomments () {
-			window._hcwp = window._hcwp || [];
-		    window._hcwp.push({
-		        widget: "Stream",
-		        widget_id: 68039
-		    });
+            if ("HC_LOAD_INIT" in window) return;
+            HC_LOAD_INIT = true;
+            var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+            var hcc = document.createElement("script");
+            hcc.type = "text/javascript";
+            hcc.async = true;
+            hcc.src = ("https:" == document.location.protocol ? "https" : "http") + "://w.hypercomments.com/widget/hc/68039/" + lang + "/widget.js";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hcc, s.nextSibling);
+        }
 
-	        if ("HC_LOAD_INIT" in window) return;
-	        HC_LOAD_INIT = true;
-	        var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
-	        var hcc = document.createElement("script");
-	        hcc.type = "text/javascript";
-	        hcc.async = true;
-	        hcc.src = ("https:" == document.location.protocol ? "https" : "http") + "://w.hypercomments.com/widget/hc/68039/" + lang + "/widget.js";
-	        var s = document.getElementsByTagName("script")[0];
-	        s.parentNode.insertBefore(hcc, s.nextSibling);		    
-		}
-		function buildPlayer () {			
-			window.youTubePlayer = {};
-			window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+        function buildPlayer() {
+            window.youTubePlayer = {};
+            window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
-			function onYouTubeIframeAPIReady() {
-				YoutubeSVC.getPlayerData().then(function (r) {
-					var video, id, playerParam;
-					// здесь надо комментить, 
-					id = r.items[0].id.videoId;
-					// var id = "W_0fndxoZIM";
-					if (youTubePlayer.timeoutId) 
-						clearTimeout(youTubePlayer.timeoutId);
-					youTubePlayer.timeoutId = $timeout(function (argument) {
-						onYouTubeIframeAPIReady();
-					}, 1*60*1000); 
+            function onYouTubeIframeAPIReady() {
+                YoutubeSVC.getPlayerData().then(function(r) {
+                    var video, id, playerParam;
+                    // здесь надо комментить, 
+                    id = r.items[0].id.videoId;
+                    // var id = "W_0fndxoZIM";
+                    if (youTubePlayer.timeoutId)
+                        clearTimeout(youTubePlayer.timeoutId);
+                    youTubePlayer.timeoutId = $timeout(function(argument) {
+                        onYouTubeIframeAPIReady();
+                    }, 1 * 60 * 1000);
 
-					if (youTubePlayer.id === id){
-			        	return;
-					} else if(!!youTubePlayer.id) {
-						youTubePlayer.player.stopVideo();
-			        	youTubePlayer.player.loadVideoById(id);
-			        	youTubePlayer.id = id;
-			        	return;
-					}
-					
-					youTubePlayer.id = id;
-					playerParam = preparePlayerParam(id);
-					youTubePlayer.player =  new YT.Player('player', playerParam);
-					
-				});
-			}
-			//prepare player param 
-			function preparePlayerParam (id) {
-				var param = {
-			        height: '390',
-			      	width: '640',
-			      	playerVars:{
-						rel: 0,
-						fresca_preroll: 1,
-						controls: 1
-			      	},
-				    events: {
-				      'onReady': onPlayerReady,
-				      'onStateChange': onPlayerStateChange
-				    }
-				};
-				
-				if (id === "playlist") {
-					param.playerVars.listType = 'playlist';
-					param.playerVars.list = "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ";
-					param.playerVars.controls = "1";
+                    if (youTubePlayer.id === id) {
+                        return;
+                    } else if (!!youTubePlayer.id) {
+                        youTubePlayer.player.stopVideo();
+                        youTubePlayer.player.loadVideoById(id);
+                        youTubePlayer.id = id;
+                        return;
+                    }
 
-				} else{
-					param.videoId = id;
-				}
-				//todo:David - this is temporaly integration with Angular (need move all code thare)
-				var playerScope = angular.element(document.querySelector( '#player' ) ).scope();
-				if (id === "playlist")
-					playerScope.$apply(playerScope.main.setLive("false"));
-				else
-					playerScope.$apply(playerScope.main.setLive ("true", id));
-				
-				return param;
-			}
-			function onPlayerReady (event) {		
-				youTubePlayer.player.playVideo();		
-				
-			}
-			function onPlayerStateChange (event) {
-			}
-		}
-	}
+                    youTubePlayer.id = id;
+                    playerParam = preparePlayerParam(id);
+                    youTubePlayer.player = new YT.Player('player', playerParam);
+
+                });
+            }
+            //prepare player param 
+            function preparePlayerParam(id) {
+                var param = {
+                    height: '390',
+                    width: '640',
+                    playerVars: {
+                        rel: 0,
+                        fresca_preroll: 1,
+                        controls: 1
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                };
+
+                if (id === "playlist") {
+                    param.playerVars.listType = 'playlist';
+                    param.playerVars.list = "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ";
+                    param.playerVars.controls = "1";
+
+                } else {
+                    param.videoId = id;
+                }
+                //todo:David - this is temporaly integration with Angular (need move all code thare)
+                var playerScope = angular.element(document.querySelector('#player')).scope();
+                if (id === "playlist")
+                    playerScope.$apply(playerScope.main.setLive("false"));
+                else
+                    playerScope.$apply(playerScope.main.setLive("true", id));
+
+                return param;
+            }
+
+            function onPlayerReady(event) {
+                youTubePlayer.player.playVideo();
+
+            }
+
+            function onPlayerStateChange(event) {}
+        }
+    }
 })(angular.module('bbWebinar'));
-
 
 (function (app) {
 	app.service('YoutubeSVC', YoutubeSVC);
@@ -388,8 +371,13 @@
 		vm.openClip = openClip;
 		vm.setLive = setLive;
 		vm.isLive = false;
+		vm.initVideo = initVideo;
 		vm.addHypercomments = UtilitiesSVC.addHypercomments();
 		return vm;
+		
+		function initVideo() {
+		 	UtilitiesSVC.buildPlayer(); 
+		 } 
 		function setLive (live, id) {
 			vm.isLive = (live === "true");
 			if (vm.isLive) 
@@ -427,19 +415,32 @@
 	}	
 
 }(angular.module('bbWebinar')));
-	(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		})(window,document,'script','dataLayer','GTM-5WGLDJ');
-	(function(){ var widget_id = 'ygZrmdRfik';
-		var s = document.createElement('script'); s.type = 'text/javascript';
-		s.async = true; s.src =
-		'//code.jivosite.com/script/widget/'+widget_id; var ss =
-		document.getElementsByTagName('script')[0];
-		ss.parentNode.insertBefore(s, ss);
-	}) ();
-	
+	(function(w, d, s, l, i) {
+	    w[l] = w[l] || [];
+	    w[l].push({
+	        'gtm.start': new Date().getTime(),
+	        event: 'gtm.js'
+	    });
+	    var f = d.getElementsByTagName(s)[0],
+	        j = d.createElement(s),
+	        dl = l != 'dataLayer' ? '&l=' + l : '';
+	    j.async = true;
+	    j.src =
+	        '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+	    f.parentNode.insertBefore(j, f);
+	})(window, document, 'script', 'dataLayer', 'GTM-5WGLDJ');
+	(function() {
+	    var widget_id = 'ygZrmdRfik';
+	    var s = document.createElement('script');
+	    s.type = 'text/javascript';
+	    s.async = true;
+	    s.src =
+	        '//code.jivosite.com/script/widget/' + widget_id;
+	    var ss =
+	        document.getElementsByTagName('script')[0];
+	    ss.parentNode.insertBefore(s, ss);
+	})();
+
 (function($) {
     window.fnames = new Array();
     window.ftypes = new Array();
@@ -449,8 +450,29 @@
     ftypes[1] = 'text';
     fnames[3] = 'MMERGE3';
     ftypes[3] = 'text';
+
+    jQuery.extend(jQuery.validator.messages, {
+        required: "Это поле необходимо заполнить.",
+        remote: "Пожалуйста, введите правильное значение.",
+        email: "Пожалуйста, введите корректный адрес электронной почты.",
+        url: "Пожалуйста, введите корректный URL.",
+        date: "Пожалуйста, введите корректную дату.",
+        dateISO: "Пожалуйста, введите корректную дату в формате ISO.",
+        number: "Пожалуйста, введите число.",
+        digits: "Пожалуйста, вводите только цифры.",
+        creditcard: "Пожалуйста, введите правильный номер кредитной карты.",
+        equalTo: "Пожалуйста, введите такое же значение ещё раз.",
+        accept: "Пожалуйста, выберите файл с правильным расширением.",
+        maxlength: jQuery.validator.format("Пожалуйста, введите не больше {0} символов."),
+        minlength: jQuery.validator.format("Пожалуйста, введите не меньше {0} символов."),
+        rangelength: jQuery.validator.format("Пожалуйста, введите значение длиной от {0} до {1} символов."),
+        range: jQuery.validator.format("Пожалуйста, введите число от {0} до {1}."),
+        max: jQuery.validator.format("Пожалуйста, введите число, меньшее или равное {0}."),
+        min: jQuery.validator.format("Пожалуйста, введите число, большее или равное {0}.")
+    });
 })(jQuery);
 
+	
 // JSONP callback function of youtube API /////////////
 (function (jQuery) {
 	window.youTubePlayer = {};
