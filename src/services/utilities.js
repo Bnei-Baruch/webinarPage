@@ -1,11 +1,13 @@
 (function(app) {
     app.service('UtilitiesSVC', UtilitiesSVC);
-    UtilitiesSVC.$inject = ["YoutubeSVC", "$timeout", "$http"];
+    UtilitiesSVC.$inject = ["$q"];
 
-    function UtilitiesSVC(YoutubeSVC, $timeout) {
+    function UtilitiesSVC($q) {
+
+
         return {
             addHypercomments: addHypercomments,
-            buildPlayer: buildPlayer
+            initPlayer: initPlayer
         };
 
         function addHypercomments() {
@@ -25,78 +27,18 @@
             var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(hcc, s.nextSibling);
         }
-
-        function buildPlayer() {
-            window.youTubePlayer = {};
+        /*
+            init youtube player
+        */
+        function initPlayer() {
+            var deferred = $q.defer();
             window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
+            return deferred.promise;
+
             function onYouTubeIframeAPIReady() {
-                YoutubeSVC.getPlayerData().then(function(r) {
-                    var video, id, playerParam;
-                    // здесь надо комментить, 
-                    id = r.items[0].id.videoId;
-                    // var id = "W_0fndxoZIM";
-                    if (youTubePlayer.timeoutId)
-                        clearTimeout(youTubePlayer.timeoutId);
-                    youTubePlayer.timeoutId = $timeout(function(argument) {
-                        onYouTubeIframeAPIReady();
-                    }, 1 * 60 * 1000);
-
-                    if (youTubePlayer.id === id) {
-                        return;
-                    } else if (!!youTubePlayer.id) {
-                        youTubePlayer.player.stopVideo();
-                        youTubePlayer.player.loadVideoById(id);
-                        youTubePlayer.id = id;
-                        return;
-                    }
-
-                    youTubePlayer.id = id;
-                    playerParam = preparePlayerParam(id);
-                    youTubePlayer.player = new YT.Player('player', playerParam);
-
-                });
+                deferred.resolve(true);
             }
-            //prepare player param 
-            function preparePlayerParam(id) {
-                var param = {
-                    height: '390',
-                    width: '640',
-                    playerVars: {
-                        rel: 0,
-                        fresca_preroll: 1,
-                        controls: 1
-                    },
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                };
-
-                if (id === "playlist") {
-                    param.playerVars.listType = 'playlist';
-                    param.playerVars.list = "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ";
-                    param.playerVars.controls = "1";
-
-                } else {
-                    param.videoId = id;
-                }
-                //todo:David - this is temporaly integration with Angular (need move all code thare)
-                var playerScope = angular.element(document.querySelector('#player')).scope();
-                if (id === "playlist")
-                    playerScope.$apply(playerScope.main.setLive("false"));
-                else
-                    playerScope.$apply(playerScope.main.setLive("true", id));
-
-                return param;
-            }
-
-            function onPlayerReady(event) {
-                youTubePlayer.player.playVideo();
-
-            }
-
-            function onPlayerStateChange(event) {}
         }
     }
 })(angular.module('bbWebinar'));

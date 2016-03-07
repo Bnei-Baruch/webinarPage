@@ -150,6 +150,36 @@ body {
     background-color: white;
 }
 
+.timer {
+    position: relative;
+    top: 30%;
+    text-align: center;
+    z-index: 10;
+}
+
+.timer > div {
+    border-radius: 2px;
+    background: rgba(0, 0, 0, .7);
+    color: #FFF;    
+}
+.timer > div span{
+    font-size: 10px;
+}
+.timer > div h1{
+    margin-bottom: 0;
+}
+
+.upcoming {
+    position: relative;
+}
+
+.upcoming img {
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+}
+
 .playList {
     font-size: 12px;
 }
