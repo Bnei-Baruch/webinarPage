@@ -169,6 +169,15 @@ body {
     margin-bottom: 0;
 }
 
+.timer  h4{
+    margin-bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    color: #FFF;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    
+}
+
 .upcoming {
     position: relative;
 }

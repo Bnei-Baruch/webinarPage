@@ -10,10 +10,8 @@
             $rootScope.config = {};
             GetConfig.getConfig().then(function(r) {
                 var d = r.data.webinarDate;
-                var config = {
-                    "clipStartIn": new Date(d.year, d.month, d.day, d.hour),
-                    "pageTitle": r.data.pageTitle
-                };
+                var config = r.data.config;
+                config.clipStartIn = Date.UTC(d.year, d.month, d.day, (d.hour - 3), d.min);
                 angular.extend($rootScope.config, config);
             });
         });
@@ -221,9 +219,7 @@
         return {
             getPlayList: GetPlayList,
             getVideoById: GetVideoById,
-            getPlayerData: getPlayerData,
-            getLiveData: getLiveData,
-            test: test
+            getPlayerData: getPlayerData
         };
 
         function GetPlayList(pageToken) {
@@ -241,7 +237,7 @@
                 url: "https://www.googleapis.com/youtube/v3/playlistItems/",
                 params: data
             }
-            return $http(param).then(function (r) {
+            return $http(param).then(function(r) {
                 return r.data;
             });
         }
@@ -257,7 +253,7 @@
                 url: "https://www.googleapis.com/youtube/v3/videos/",
                 params: data
             }
-            return $http(param).then(function (r) {
+            return $http(param).then(function(r) {
                 r.data.items[0].id = {
                     "kind": "youtube#video",
                     "videoId": r.data.items[0].id
@@ -265,16 +261,14 @@
                 return r.data;
             });
         }
-
-        function getPlayerData() {
+        //TODO: not take into account that can be two upcomming/live events
+        function getPlayerData(channelId) {
             var data = {
                 "part": "snippet",
                 "eventType": 'upcoming',
                 "type": 'video',
                 "order": 'date',
-                "channelId": 'UC0JEz9QF6lT5tCqIkbzt65A',
-                //"channelId": 'UCAhq4ttjWzWAT4zmPXm0DZw',
-                //channelId : 'UCXBGJ0iWWa5jmSrLTvgARRQ',
+                "channelId": channelId || 'UCAhq4ttjWzWAT4zmPXm0DZw',
                 "key": 'AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0',
             };
 
@@ -283,45 +277,25 @@
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 params: data
             }
+
             return $http(param).then(function(r) {
                 if (r.data.items.length > 0)
                     return r.data;
                 param.params.eventType = 'live';
                 return $http(param).then(function(r) {
                     //if no live video take spacial playlist (use simulation of request)
-                    if (r.data.items.length === 0)
-                        r.data.items = [{ id: { videoId: "playlist" } }];
-                    return r.data;
-                });
-            });
-        }
+                    if (r.data.items.length > 0) {
+                        return r.data;
+                    } else {
 
-        function getLiveData() {
-            var url = 'https://www.googleapis.com/youtubei/v1/player/live_state';
-            var param = {
-                alt: 'json',
-                key: 'AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0',
-            };
-            return $http.post(url, param).then(function(r) {
-                if (r.data.items.length > 0)
-                    return r.data;
-                param.eventType = 'live';
-                return $http.get(url, param).then(function(r) {
-                    //if no live video take spacial playlist (use simulation of request)
-                    if (r.data.items.length === 0)
-                        r.data.items = [{ id: { videoId: "playlist" } }];
-                    return r.data;
+                        return {
+                            "items": [{
+                                "id": { "videoId": "playlist" },
+                                "snippet": { "liveBroadcastContent": "playlist" }
+                            }]
+                        };
+                    }
                 });
-            });
-        }
-
-        function test() {
-            var url = 'http://devedu.kbb1.com/webinar2/server/youtubeApi.php';
-            var param = {
-                test: '123'
-            };
-            return $http.post(url, param).then(function(r) {
-                console.log(r);
             });
         }
     }
@@ -350,82 +324,90 @@
 
 }(angular.module('bbWebinar')));
 (function(app) {
-    //temparery param of started webinar date (year, month, date, hours, minutes)
-    var _tempDateParam = new Date(2016, 0, 24, 17);
-    /*_tempDateParam = new Date(
-        _tempDateParam.getUTCFullYear(), 
-        _tempDateParam.getUTCMonth(), 
-        _tempDateParam.getUTCDate(),  
-        _tempDateParam.getUTCHours()
-    );*/
+    'use strict'
+    /*temparery param of started webinar date (year, month, date, hours, minutes)*/
     app.controller('MainCtrl', Controller);
     Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC", "$rootScope", "$timeout"];
 
     function Controller(YoutubeSVC, UtilitiesSVC, $rootScope, $timeout) {
         var vm = this;
-        var player, clipId, timeoutPromise;
+        var clipId, timeoutPromise;
 
 
-        vm.pageCounter = 0, vm.currentClip = {}, vm.playList = [];
+        vm.pageCounter = 0;
+        vm.currentClip = {};
+        vm.playList = [];
         vm.loadPage = loadPage;
         vm.openClip = openClip;
-        vm.playerMode = "live";
-        vm.initVideo = initVideo;
+        vm.playerMode = "playlist";
         vm.addHypercomments = UtilitiesSVC.addHypercomments();
+        initVideo();
         return vm;
 
-        /*initialised from html - ngInit*/
+        /*initialise youtube player API*/
         function initVideo() {
-            UtilitiesSVC.initPlayer().then(_loadPlayerData);
-        }
-
-        /** load and update data for player with function that call himself*/
-        function _loadPlayerData(data) {
-            YoutubeSVC.getPlayerData().then(function(r) {
-                var video, id, item;
-
-                item = r.items[0];
-                id = item.id.videoId;
-
-                if (timeoutPromise)
-                    $timeout.cancel(timeoutPromise);
-
-                timeoutPromise = $timeout(_loadPlayerData, 1 * 60 * 1000);
-                var delta = $rootScope.config.clipStartIn < _getMoskowTimeNow();
-                if (clipId === id) {
-                    return;
-                } else if (!!clipId && id.toLowerCase() !== "playlist") {
-                    player.stopVideo();
-                    player.loadVideoById(id);
-                } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming" && delta) {
-                    vm.playerMode = "playlist";
-                    clipId = "playlist";
-                    item.id.videoId = "playlist";
-                    $timeout.cancel(timeoutPromise);
-                    return;
-                } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming") {
-                    _switchToUpcomingMode(item);
-                    return;
-                } else if (item.snippet.liveBroadcastContent.toLowerCase() === "live") {
-                    vm.playerMode = "live";
+            UtilitiesSVC.initPlayer().then(function(r) {
+                if (!$rootScope.player) {
+                    var _obj = _getParamObj();
+                    $rootScope.player = new YT.Player('player', _obj);
                 }
-                clipId = id;
-                _buildPlayer(item);
             });
         }
 
-        //use Moskow time couse the time in .config is Moskow time
-        function _getMoskowTimeNow() {
-            var _now = new Date();
-            var delta = _now.getTimezoneOffset() * 60 * 1000
-            var moskowDate = _now.getTime() + delta + 2 * 60 * 60 * 1000;
-            return moskowDate;
+        /** load and update data for player with function that call himself*/
+        function _loadPlayerData() {
+            YoutubeSVC.getPlayerData($rootScope.config.channelId)
+                .then(_loadPlayerDataCallback);
+        }
+
+        function _loadPlayerDataCallback(r) {
+            var video, id, item;
+
+            item = r.items[0];
+            id = item.id.videoId;
+
+            if (timeoutPromise)
+                $timeout.cancel(timeoutPromise);
+
+            timeoutPromise = $timeout(_loadPlayerData, 1 * 60 * 1000);
+            var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
+            if (clipId === id && item.snippet.liveBroadcastContent === vm.playerMode) {
+                return;
+            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming" && (delta + 1 * 30 * 60 * 1000 < 0)) {
+                _switchToPlayListMode(item);
+                $timeout.cancel(timeoutPromise);
+            } else if (id === "playlist") {
+                _switchToPlayListMode(item);
+            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming") {
+                _switchToUpcomingMode(item);
+            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "live") {
+                _switchToLiveMode(item);
+            }
+            clipId = id;
+        }
+
+        function _switchToLiveMode(item) {
+            vm.playerMode = "live";
+            vm.currentClip = item;
+            $rootScope.player.loadVideoById(item.id.videoId);
+        }
+
+        function _switchToPlayListMode(item) {
+            vm.playerMode = "playlist";
+            var list = $rootScope.config.playListId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ";
+            $rootScope.player.loadPlaylist({
+                'list': list,
+                'listType': 'playlist'
+            });
+            loadPage(null, 0, 0);
         }
 
         function _switchToUpcomingMode(item) {
             vm.playerMode = "upcoming";
+            $rootScope.player.stopVideo();
+            vm.currentClip = item;
             $timeout.cancel(timeoutPromise);
-            var delta = $rootScope.config.clipStartIn - _getMoskowTimeNow();
+            var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
 
             vm.counter = {
                 "url": item.snippet.thumbnails.high.url,
@@ -435,12 +417,22 @@
         }
 
 
+        /*use Moskow time couse the time in .config is Moskow time*/
+        function _getUTCTimeNow() {
+            var d = new Date();
+            var nowUTC = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
+            return nowUTC;
+        }
+
         /*start time counter*/
         function _runIncreaseCount() {
-            var delta = _getMoskowTimeNow() - $rootScope.config.clipStartIn;
+            var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
             if (delta < 0) {
-                _loadPlayerData();
+                vm.counter.timer = _getDateBindObj(delta);
                 $timeout.cancel(timeoutPromise);
+                timeoutPromise = $timeout(function() {
+                    _loadPlayerData();
+                }, 10 * 1000);
                 return;
             }
 
@@ -454,34 +446,17 @@
             if (!startTime)
                 return "";
             var delta, d, h, m, s;
+            if (startTime <= 0)
+                return { "d": 0, "h": 0, "m": 0, "s": 0 };
             delta = new Date(startTime);
             d = delta.getUTCDate() - 1;
             h = delta.getUTCHours();
             m = delta.getUTCMinutes();
             s = delta.getUTCSeconds();
-            return {"d": d, "h": h, "m": m, "s": s};
+            return { "d": d, "h": h, "m": m, "s": s };
         }
 
-        function _buildPlayer(item) {
-            var defParam = _getParamObj();
-
-            if (item.id.videoId.toLowerCase() === "playlist") {
-                vm.playerMode = "playlist";
-                defParam.playerVars.listType = 'playlist';
-                defParam.playerVars.list = "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ";
-                defParam.playerVars.controls = "1";
-                loadPage(null, 0, 0);
-            } else {
-                vm.playerMode = "live";
-                defParam.videoId = item.id.videoId;
-            }
-
-            player = new YT.Player('player', defParam);
-
-        }
-
-
-        //prepare player param 
+        /*prepare player param */
         function _getParamObj(id) {
             var param = {
                 height: '390',
@@ -493,7 +468,7 @@
                 },
                 events: {
                     "onReady": function(event) {
-                        player.playVideo();
+                        _loadPlayerData();
                     }
                 }
             };
@@ -504,14 +479,14 @@
         function openClip(clip, $index) {
             vm.currentClip = clip;
             vm.currentClip.$index = vm.playList.pageInfo.resultsPerPage * vm.pageCounter + $index + 1;
-            player.loadVideoById(clip.snippet.resourceId.videoId);
+            $rootScope.player.loadVideoById(clip.snippet.resourceId.videoId);
         }
 
         function loadPage(pageToken, count) {
             vm.pageCounter += count;
             YoutubeSVC.getPlayList(pageToken).then(function(r) {
-                vm.playList = r.data;
-                vm.currentClip = r.data.items[0];
+                vm.playList = r;
+                vm.currentClip = r.items[0];
                 vm.currentClip.$index = vm.playList.pageInfo.resultsPerPage * vm.pageCounter + 1;
             });
         }

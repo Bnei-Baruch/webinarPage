@@ -6,9 +6,7 @@
         return {
             getPlayList: GetPlayList,
             getVideoById: GetVideoById,
-            getPlayerData: getPlayerData,
-            getLiveData: getLiveData,
-            test: test
+            getPlayerData: getPlayerData
         };
 
         function GetPlayList(pageToken) {
@@ -26,7 +24,7 @@
                 url: "https://www.googleapis.com/youtube/v3/playlistItems/",
                 params: data
             }
-            return $http(param).then(function (r) {
+            return $http(param).then(function(r) {
                 return r.data;
             });
         }
@@ -42,7 +40,7 @@
                 url: "https://www.googleapis.com/youtube/v3/videos/",
                 params: data
             }
-            return $http(param).then(function (r) {
+            return $http(param).then(function(r) {
                 r.data.items[0].id = {
                     "kind": "youtube#video",
                     "videoId": r.data.items[0].id
@@ -50,16 +48,14 @@
                 return r.data;
             });
         }
-
-        function getPlayerData() {
+        //TODO: not take into account that can be two upcomming/live events
+        function getPlayerData(channelId) {
             var data = {
                 "part": "snippet",
                 "eventType": 'upcoming',
                 "type": 'video',
                 "order": 'date',
-                "channelId": 'UC0JEz9QF6lT5tCqIkbzt65A',
-                //"channelId": 'UCAhq4ttjWzWAT4zmPXm0DZw',
-                //channelId : 'UCXBGJ0iWWa5jmSrLTvgARRQ',
+                "channelId": channelId || 'UCAhq4ttjWzWAT4zmPXm0DZw',
                 "key": 'AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0',
             };
 
@@ -68,45 +64,25 @@
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 params: data
             }
+
             return $http(param).then(function(r) {
                 if (r.data.items.length > 0)
                     return r.data;
                 param.params.eventType = 'live';
                 return $http(param).then(function(r) {
                     //if no live video take spacial playlist (use simulation of request)
-                    if (r.data.items.length === 0)
-                        r.data.items = [{ id: { videoId: "playlist" } }];
-                    return r.data;
-                });
-            });
-        }
+                    if (r.data.items.length > 0) {
+                        return r.data;
+                    } else {
 
-        function getLiveData() {
-            var url = 'https://www.googleapis.com/youtubei/v1/player/live_state';
-            var param = {
-                alt: 'json',
-                key: 'AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0',
-            };
-            return $http.post(url, param).then(function(r) {
-                if (r.data.items.length > 0)
-                    return r.data;
-                param.eventType = 'live';
-                return $http.get(url, param).then(function(r) {
-                    //if no live video take spacial playlist (use simulation of request)
-                    if (r.data.items.length === 0)
-                        r.data.items = [{ id: { videoId: "playlist" } }];
-                    return r.data;
+                        return {
+                            "items": [{
+                                "id": { "videoId": "playlist" },
+                                "snippet": { "liveBroadcastContent": "playlist" }
+                            }]
+                        };
+                    }
                 });
-            });
-        }
-
-        function test() {
-            var url = 'http://devedu.kbb1.com/webinar2/server/youtubeApi.php';
-            var param = {
-                test: '123'
-            };
-            return $http.post(url, param).then(function(r) {
-                console.log(r);
             });
         }
     }

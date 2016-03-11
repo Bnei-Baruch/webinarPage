@@ -1,5 +1,5 @@
 <div ng-controller="MainCtrl as main" class="row">
-    <div ng-if="main.playerMode == 'playlist'" class="col-md-12">
+    <div ng-if="main.playerMode != 'playlist'" class="col-md-12">
         <div class="well white clearfix titleWrapper">
             <h3>
                 <span class="label label-info">тема вебинара</span>
@@ -7,19 +7,19 @@
             </h3>
             <h5>
                 <span class="label label-primary">дата и время</span>
-                {{main.currentClip.startIn | date: 'd MMMM, HH:mm'}} мск
+                {{$root.config.clipStartIn | date: 'd MMMM, HH:mm'}}
             </h5>
         </div>
     </div>
     <div class="col-md-8">
-        <div class=" well blue clearfix" ng-init="main.initVideo()">
+        <div class=" well blue clearfix">
             <div ng-class="main.playerMode != 'playlist' ? 'col-sm-12': 'col-sm-9'" class="col-xs-12">
                 <div class="embed-responsive embed-responsive-16by9">
                     <div id="player" class="embed-responsive-item" ng-show="main.playerMode != 'upcoming'"></div>
                     <div class="upcoming embed-responsive-item" ng-show="main.playerMode == 'upcoming'">
-                        <img ng-src="{{main.counter.url}}">
+                        <img src="http://kabacademy.com/wp-content/uploads/2015/10/21.jpg">
                         <div class="timer row col-sm-6 col-sm-offset-3">
-                            До следующего семинара осталось:
+                            <h4>До следующего вебинара осталось:</h4>
                             <div class="col-sm-3">
                                 <h1>
                                     {{main.counter.timer.d}}
@@ -100,4 +100,7 @@
     <div class="col-md-4">
         <div id="hypercomments_widget" ng-init="main.addHypercomments()"></div>
     </div>
+    <!-- load player after angular -->
+    <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 </div>
+
