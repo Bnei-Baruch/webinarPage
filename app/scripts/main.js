@@ -410,7 +410,7 @@
             var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
 
             vm.counter = {
-                "url": item.snippet.thumbnails.high.url,
+                "url": $rootScope.config.timerImg || item.snippet.thumbnails.high.url,
                 "timer": _getDateBindObj(delta)
             };
             _runIncreaseCount();

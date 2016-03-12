@@ -17,7 +17,7 @@
                 <div class="embed-responsive embed-responsive-16by9">
                     <div id="player" class="embed-responsive-item" ng-show="main.playerMode != 'upcoming'"></div>
                     <div class="upcoming embed-responsive-item" ng-show="main.playerMode == 'upcoming'">
-                        <img src="http://kabacademy.com/wp-content/uploads/2015/10/21.jpg">
+                        <img  ng-src={{main.counter.url}}>
                         <div class="timer row col-sm-6 col-sm-offset-3">
                             <h4>До следующего вебинара осталось:</h4>
                             <div class="col-sm-3">
@@ -28,7 +28,7 @@
                                     Дни
                                 </span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-xs-3">
                                 <h1>
                                     {{main.counter.timer.h}}
                                 </h1>
@@ -36,7 +36,7 @@
                                     Часы
                                 </span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-xs-3">
                                 <h1>
                                     {{main.counter.timer.m}}
                                 </h1>
@@ -44,7 +44,7 @@
                                     Минуты
                                 </span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-xs-3">
                                 <h1>
                                     {{main.counter.timer.s}}
                                 </h1>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3 col-xs-12 playList" ng-if="main.playerMode == 'playlist'">
+            <div class="col-xs-3 col-xs-12 playList" ng-if="main.playerMode == 'playlist'">
                 <div class="clearfix">
                     Вебинары
                     <span>
