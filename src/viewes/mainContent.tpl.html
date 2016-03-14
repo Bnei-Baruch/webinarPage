@@ -15,12 +15,15 @@
         <div class=" well blue clearfix">
             <div ng-class="main.playerMode != 'playlist' ? 'col-sm-12': 'col-sm-9'" class="col-xs-12">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <div id="player" class="embed-responsive-item" ng-show="main.playerMode != 'upcoming'"></div>
+                    <div id="player" class="embed-responsive-item" ng-show="main.playerMode != 'upcoming'">
+                    </div>
                     <div class="upcoming embed-responsive-item" ng-show="main.playerMode == 'upcoming'">
-                        <img  ng-src={{main.counter.url}}>
+                        <!-- <img src="http://kabacademy.com/wp-content/uploads/2015/10/21.jpg"> -->
+                        <img src="./app/images/webinar.jpg">
+						<!-- <img ng-src={{main.counter.url}}> -->
                         <div class="timer row col-sm-6 col-sm-offset-3">
                             <h4>До следующего вебинара осталось:</h4>
-                            <div class="col-sm-3">
+                            <div class="col-xs-3">
                                 <h1>
                                     {{main.counter.timer.d}}
                                 </h1>
@@ -56,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-3 col-xs-12 playList" ng-if="main.playerMode == 'playlist'">
+            <div class="col-sm-3 col-xs-12 playList" ng-if="main.playerMode == 'playlist'">
                 <div class="clearfix">
                     Вебинары
                     <span>
@@ -79,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <div class="row registerBtns">
+        <!-- <div class="row registerBtns">
             <div class="col-sm-4 col-xs-12">
                 <a class="btn-block btn-primary btn-lg" href="http://kabacademy.com/course/osnovyi-kabbalyi-zima-2016/">
                     <span class="btnIcon online"></span> Записаться на онлайн-курс
@@ -95,12 +98,12 @@
                     <span class="btnIcon ask"></span> Задать вопрос М.Лайтману
                 </a>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="col-md-4">
         <div id="hypercomments_widget" ng-init="main.addHypercomments()"></div>
     </div>
+    
     <!-- load player after angular -->
     <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 </div>
-
