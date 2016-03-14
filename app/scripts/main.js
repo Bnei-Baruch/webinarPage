@@ -212,6 +212,7 @@
 })(angular.module('bbWebinar'));
 
 (function(app) {
+    var key = "AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0";
     app.service('YoutubeSVC', YoutubeSVC);
     YoutubeSVC.$inject = ["$http"];
 
@@ -222,13 +223,13 @@
             getPlayerData: getPlayerData
         };
 
-        function GetPlayList(pageToken) {
+        function GetPlayList(pageToken, playlistId) {
             var data = {
-                "part": "snippet",
-                "playlistId": "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
-                "key": "AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0",
-                "maxResults": 4
-            }
+               part: "snippet",
+               plylistId: playlistId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
+               key: key,
+                maxResults: 4
+            };
             if (!!pageToken)
                 data.pageToken = pageToken;
 
@@ -244,9 +245,9 @@
 
         function GetVideoById(id) {
             var data = {
-                "part": "snippet",
-                "id": id,
-                "key": "AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0"
+                part: "snippet",
+                id: id,
+                key: key
             }
             var param = {
                 method: "GET",
@@ -261,15 +262,16 @@
                 return r.data;
             });
         }
+
         //TODO: not take into account that can be two upcomming/live events
         function getPlayerData(channelId) {
             var data = {
                 "part": "snippet",
-                "eventType": 'upcoming',
+                "eventType": 'live',
                 "type": 'video',
                 "order": 'date',
                 "channelId": channelId || 'UCAhq4ttjWzWAT4zmPXm0DZw',
-                "key": 'AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0',
+                "key": key,
             };
 
             var param = {
@@ -281,7 +283,7 @@
             return $http(param).then(function(r) {
                 if (r.data.items.length > 0)
                     return r.data;
-                param.params.eventType = 'live';
+                param.params.eventType = 'upcoming';
                 return $http(param).then(function(r) {
                     //if no live video take spacial playlist (use simulation of request)
                     if (r.data.items.length > 0) {
