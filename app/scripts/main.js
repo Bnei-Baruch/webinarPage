@@ -212,6 +212,7 @@
 })(angular.module('bbWebinar'));
 
 (function(app) {
+    var key = "AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0";
     app.service('YoutubeSVC', YoutubeSVC);
     YoutubeSVC.$inject = ["$http"];
 
@@ -222,13 +223,13 @@
             getPlayerData: getPlayerData
         };
 
-        function GetPlayList(pageToken) {
+        function GetPlayList(pageToken, playlistId) {
             var data = {
-                "part": "snippet",
-                "playlistId": "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
-                "key": "AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0",
-                "maxResults": 4
-            }
+               part: "snippet",
+               plylistId: playlistId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
+               key: key,
+                maxResults: 4
+            };
             if (!!pageToken)
                 data.pageToken = pageToken;
 
@@ -244,9 +245,9 @@
 
         function GetVideoById(id) {
             var data = {
-                "part": "snippet",
-                "id": id,
-                "key": "AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0"
+                part: "snippet",
+                id: id,
+                key: key
             }
             var param = {
                 method: "GET",
@@ -261,15 +262,16 @@
                 return r.data;
             });
         }
+
         //TODO: not take into account that can be two upcomming/live events
         function getPlayerData(channelId) {
             var data = {
                 "part": "snippet",
-                "eventType": 'upcoming',
+                "eventType": 'live',
                 "type": 'video',
                 "order": 'date',
                 "channelId": channelId || 'UCAhq4ttjWzWAT4zmPXm0DZw',
-                "key": 'AIzaSyBoMXQDrlRUCQCxv4fjfiyTHXog8OB2Nz0',
+                "key": key,
             };
 
             var param = {
@@ -281,7 +283,7 @@
             return $http(param).then(function(r) {
                 if (r.data.items.length > 0)
                     return r.data;
-                param.params.eventType = 'live';
+                param.params.eventType = 'upcoming';
                 return $http(param).then(function(r) {
                     //if no live video take spacial playlist (use simulation of request)
                     if (r.data.items.length > 0) {
@@ -324,7 +326,6 @@
 
 }(angular.module('bbWebinar')));
 (function(app) {
-    'use strict'
     /*temparery param of started webinar date (year, month, date, hours, minutes)*/
     app.controller('MainCtrl', Controller);
     Controller.$ingect = ["YoutubeSVC", "UtilitiesSVC", "$rootScope", "$timeout"];
@@ -366,24 +367,37 @@
             item = r.items[0];
             id = item.id.videoId;
 
-            if (timeoutPromise)
+            if (timeoutPromise) {
                 $timeout.cancel(timeoutPromise);
+            }
 
             timeoutPromise = $timeout(_loadPlayerData, 1 * 60 * 1000);
             var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
-            if (clipId === id && item.snippet.liveBroadcastContent === vm.playerMode) {
+            if (clipId === id && _modeIsNotChanged(item.snippet.liveBroadcastContent, vm.playerMode)) {
                 return;
-            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming" && (delta + 1 * 30 * 60 * 1000 < 0)) {
-                _switchToPlayListMode(item);
-                $timeout.cancel(timeoutPromise);
+            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming" && (delta < 0)) {
+                _switchToLiveMode(item);
             } else if (id === "playlist") {
                 _switchToPlayListMode(item);
             } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming") {
                 _switchToUpcomingMode(item);
-            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "live") {
+            } else{
                 _switchToLiveMode(item);
             }
             clipId = id;
+        }
+
+        function _modeIsNotChanged(newVal, oldVal) {
+            var _modeNew = "playlist",
+                _modeOld = "playlist";
+
+            if (newVal === "live" || newVal === "upcoming") {
+                _modeNew = "live";
+            }
+            if (oldVal === "live" || oldVal === "upcoming") {
+                _modeOld = "live";
+            }
+            return _modeNew === _modeOld;
         }
 
         function _switchToLiveMode(item) {
@@ -394,10 +408,9 @@
 
         function _switchToPlayListMode(item) {
             vm.playerMode = "playlist";
-            var list = $rootScope.config.playListId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ";
             $rootScope.player.loadPlaylist({
-                'list': list,
-                'listType': 'playlist'
+                list: $rootScope.config.playListId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
+                listType: 'playlist'
             });
             loadPage(null, 0, 0);
         }
@@ -410,14 +423,12 @@
             var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
 
             vm.counter = {
-                "url": $rootScope.config.timerImg || item.snippet.thumbnails.high.url,
-                "timer": _getDateBindObj(delta)
+                url: $rootScope.config.timerImg || item.snippet.thumbnails.high.url,
+                timer: _getDateBindObj(delta)
             };
             _runIncreaseCount();
         }
 
-
-        /*use Moskow time couse the time in .config is Moskow time*/
         function _getUTCTimeNow() {
             var d = new Date();
             var nowUTC = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
@@ -484,7 +495,7 @@
 
         function loadPage(pageToken, count) {
             vm.pageCounter += count;
-            YoutubeSVC.getPlayList(pageToken).then(function(r) {
+            YoutubeSVC.getPlayList(pageToken, $rootScope.config.playListId).then(function(r) {
                 vm.playList = r;
                 vm.currentClip = r.items[0];
                 vm.currentClip.$index = vm.playList.pageInfo.resultsPerPage * vm.pageCounter + 1;
