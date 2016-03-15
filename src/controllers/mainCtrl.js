@@ -114,9 +114,10 @@
             if (delta < 0) {
                 vm.counter.timer = _getDateBindObj(delta);
                 $timeout.cancel(timeoutPromise);
+                clipId = "";
                 timeoutPromise = $timeout(function() {
                     _loadPlayerData();
-                }, 10 * 1000);
+                }, 1 * 1000);
                 return;
             }
 

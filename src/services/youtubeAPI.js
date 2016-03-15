@@ -13,7 +13,7 @@
         function GetPlayList(pageToken, playlistId) {
             var data = {
                part: "snippet",
-               plylistId: playlistId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
+               playlistId: playlistId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
                key: key,
                 maxResults: 4
             };
