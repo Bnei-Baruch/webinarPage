@@ -5,6 +5,11 @@ var http = require('http');
 var ws = require('./server/webSocket');
 var db = require('./server/callDB');
 var bodyParser = require('body-parser');
+
+var connect = require('connect');
+var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
+
 var express = require('express');
 
 var app = express();
@@ -26,13 +31,48 @@ router.post('/getConfig', function(req, res) {
     });
 });
 
+router.post('/adminLogin', function(req, res) {
+    try {
+
+        if (global.WEBINAR_CONFIG.admin.name !== req.body.name) {
+            res.send(JSON.stringify({ error: true, message: "bad user" }));
+        } else if (global.WEBINAR_CONFIG.admin.pass !== req.body.pass) {
+            res.send(JSON.stringify({ error: true, message: "bad user" }));
+        } else {
+            req.session.authorized = true;
+            req.session.username = req.body.name;
+            res.send(JSON.stringify({ error: false}));
+        }
+
+
+    } catch (e) {
+        res.send(JSON.stringify({ error: true, message: "bad user" }));
+    }
+});
+
 /*
 routing for admin page
 */
 var routerAdmin = express.Router();
 routerAdmin.use(express.static(__dirname + '/admin/'));
-routerAdmin.get('/', function(req, res, next) {
-    res.sendfile('./admin/index.html');
+app.use(cookieParser());
+app.use(cookieSession({ secret: global.WEBINAR_CONFIG.admin.secret }));
+
+app.all('/webinar/admin/', function(req, res, next) {
+    if (req.session.authorized && (global.WEBINAR_CONFIG.admin.name === req.session.username)) {
+        res.sendfile('./admin/index.html');
+    } else {
+        res.sendfile('./admin/login/index.html');
+    }
+
+});
+routerAdmin.use(function(req, res, next) {
+    if (req.session.authorized && (global.WEBINAR_CONFIG.admin.name === req.session.username))
+        next();
+    else {
+        res.sendfile('./admin/index.html');
+    }
+
 });
 
 routerAdmin.post('/setStatus', function(req, res) {

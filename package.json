@@ -9,7 +9,7 @@
   "dependencies": {
     "del": "*",
     "debug": "^2.2.0",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "*",
     "gulp-cache": "*",
     "gulp-concat": "*",
@@ -20,6 +20,8 @@
     "gulp-notify": "*",
     "gulp-rename": "*",
     "gulp-uglify": "*",
+    "cookie-parser": "*",
+    "cookie-session": "*",
     "jshint": "*",
     "express": "*",
     "nodemon": "*",
