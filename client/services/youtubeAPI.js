@@ -6,8 +6,7 @@
     function YoutubeSVC($http) {
         return {
             getPlayList: GetPlayList,
-            getVideoById: GetVideoById,
-            getPlayerData: getPlayerData
+            getVideoById: GetVideoById
         };
 
         function GetPlayList(pageToken, playlistId) {
@@ -42,16 +41,12 @@
                 params: data
             }
             return $http(param).then(function(r) {
-                r.data.items[0].id = {
-                    "kind": "youtube#video",
-                    "videoId": r.data.items[0].id
-                }
-                return r.data;
+                return r.data.items[0];
             });
         }
 
         //TODO: not take into account that can be two upcomming/live events
-        function getPlayerData(channelId) {
+       /* function getPlayerData(channelId) {
             var data = {
                 "part": "snippet",
                 "eventType": 'live',
@@ -86,6 +81,6 @@
                     }
                 });
             });
-        }
+        }*/
     }
 })(angular.module('bbWebinar'));

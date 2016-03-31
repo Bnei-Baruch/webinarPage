@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="WebinarAdmin">
+
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css.css">
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.14/angular.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="./main.js"></script>
+</head>
+
+<body>
+    <content class="row">
+        <form name="switchMode" ng-controller="SwitchModeController as switch" class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Manage translation</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" ng-class="status.type == switch.statusSel.type? ' active': ''" ng-repeat="status in switch.statusRadio"  ng-click="switch.setStatus(status)">
+                            {{status.type}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div ng-controller="ConfigFormController as config" class="configForm">
+            <form name="config.form" class="col-xs-6 col-xs-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Configuration</h3>
+                    </div>
+                    <div class="panel-body" class="row">
+                        <div class="clearfix">
+                            <label class="col-xs-4">Page title</label>
+                            <input type="text" class="col-xs-8" ng-model="config.sendData.pageTitle" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Live Video title</label>
+                            <input type="text" class="col-xs-8" ng-model="config.sendData.videoTitle" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Live Video ID</label>
+                            <input type="text" class="col-xs-8" ng-model="config.sendData.liveVideoId" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Play List ID</label>
+                            <input class="col-xs-8" type="text" ng-model="config.sendData.playListId" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Picture Link</label>
+                            <input class="col-xs-8" type="text" ng-model="config.sendData.imgWaitUrl" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Live start time</label>
+                            <input class="col-xs-8" type="datetime-local" ng-model="config.sendData.liveStart" required />
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-default" ng-click="config.setConfig()">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </content>
+</body>
+
+</html>

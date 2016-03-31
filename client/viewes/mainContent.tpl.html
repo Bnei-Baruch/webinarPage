@@ -15,8 +15,8 @@
         <div class=" well blue clearfix">
             <div ng-class="main.playerMode != 'playlist' ? 'col-sm-12': 'col-sm-9'" class="col-xs-12">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <div id="player" class="embed-responsive-item" ng-show="main.playerMode != 'upcoming'"></div>
-                    <div class="upcoming embed-responsive-item" ng-show="main.playerMode == 'upcoming'">
+                    <div id="player" class="embed-responsive-item" ng-show="main.playerMode != 'wait'"></div>
+                    <div class="upcoming embed-responsive-item" ng-show="main.playerMode == 'wait'">
                         <img  ng-src={{main.counter.url}}>
                         <div class="timer row col-sm-6 col-sm-offset-3">
                             <h4>До следующего вебинара осталось:</h4>

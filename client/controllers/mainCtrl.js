@@ -5,7 +5,8 @@
 
     function Controller(YoutubeSVC, UtilitiesSVC, $rootScope, $timeout) {
         var vm = this;
-        var clipId, timeoutPromise;
+        var clipId, timeoutPromise, ws;
+
 
 
         vm.pageCounter = 0;
@@ -30,76 +31,56 @@
 
         /** load and update data for player with function that call himself*/
         function _loadPlayerData() {
-            YoutubeSVC.getPlayerData($rootScope.config.channelId)
-                .then(_loadPlayerDataCallback);
-        }
 
-        function _loadPlayerDataCallback(r) {
-            var video, id, item;
+            var ws = UtilitiesSVC.getWebsocket();
+            ws.onMessage(function(data) {
+                var msg = JSON.parse(data.data);
 
-            item = r.items[0];
-            id = item.id.videoId;
-
-            if (timeoutPromise) {
-                $timeout.cancel(timeoutPromise);
-            }
-
-            timeoutPromise = $timeout(_loadPlayerData, 1 * 60 * 1000);
-            var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
-            if (clipId === id && _modeIsNotChanged(item.snippet.liveBroadcastContent, vm.playerMode)) {
-                return;
-            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming" && (delta < 0)) {
-                _switchToLiveMode(item);
-            } else if (id === "playlist") {
-                _switchToPlayListMode(item);
-            } else if (item.snippet.liveBroadcastContent.toLowerCase() === "upcoming") {
-                _switchToUpcomingMode(item);
-            } else{
-                _switchToLiveMode(item);
-            }
-            clipId = id;
-        }
-
-        function _modeIsNotChanged(newVal, oldVal) {
-            var _modeNew = "playlist",
-                _modeOld = "playlist";
-
-            if (newVal === "live" || newVal === "upcoming") {
-                _modeNew = "live";
-            }
-            if (oldVal === "live" || oldVal === "upcoming") {
-                _modeOld = "live";
-            }
-            return _modeNew === _modeOld;
-        }
-
-        function _switchToLiveMode(item) {
-            vm.playerMode = "live";
-            vm.currentClip = item;
-            $rootScope.player.loadVideoById(item.id.videoId);
-        }
-
-        function _switchToPlayListMode(item) {
-            vm.playerMode = "playlist";
-            $rootScope.player.loadPlaylist({
-                list: $rootScope.config.playListId || "PL3s9Wy5W7M-NLdc1mNXEk_BtJtsLIaGAQ",
-                listType: 'playlist'
+                switch (msg.status) {
+                    case "live":
+                        _switchToLiveMode();
+                        break;
+                    case "wait":
+                        _switchToWaitMode();
+                        break;
+                    case "playlist":
+                        _switchToPlayListMode();
+                        break;
+                }
             });
-            loadPage(null, 0, 0);
         }
 
-        function _switchToUpcomingMode(item) {
-            vm.playerMode = "upcoming";
-            $rootScope.player.stopVideo();
-            vm.currentClip = item;
-            $timeout.cancel(timeoutPromise);
-            var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
+        function _switchToLiveMode() {
+            vm.playerMode = "live";
+            YoutubeSVC.getVideoById($rootScope.config.liveVideoId).then(function(item) {
+                var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
+                vm.currentClip = item;
+                if ($rootScope.config.videoTitle)
+                    vm.currentClip.snippet.title = $rootScope.config.videoTitle;
+            });
+            $rootScope.player.loadVideoById($rootScope.config.liveVideoId);
+        }
 
-            vm.counter = {
-                url: $rootScope.config.timerImg || item.snippet.thumbnails.high.url,
-                timer: _getDateBindObj(delta)
-            };
-            _runIncreaseCount();
+        function _switchToWaitMode() {
+            vm.playerMode = "wait";
+            $rootScope.player.stopVideo();
+            $timeout.cancel(timeoutPromise);
+
+
+            YoutubeSVC.getVideoById($rootScope.config.liveVideoId).then(function(item) {
+                var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
+                vm.currentClip = item;
+                vm.counter = {
+                    url: $rootScope.config.timerImg || item.snippet.thumbnails.high.url,
+                    timer: _getDateBindObj(delta)
+                };
+                _runIncreaseCount();
+            });
+        }
+
+        function _switchToPlayListMode() {
+            vm.playerMode = "playlist";
+            loadPage(null, 0, 0);
         }
 
         function _getUTCTimeNow() {
@@ -114,10 +95,7 @@
             if (delta < 0) {
                 vm.counter.timer = _getDateBindObj(delta);
                 $timeout.cancel(timeoutPromise);
-                clipId = "";
-                timeoutPromise = $timeout(function() {
-                    _loadPlayerData();
-                }, 1 * 1000);
+                //_loadPlayerData();
                 return;
             }
 
@@ -173,6 +151,12 @@
                 vm.playList = r;
                 vm.currentClip = r.items[0];
                 vm.currentClip.$index = vm.playList.pageInfo.resultsPerPage * vm.pageCounter + 1;
+
+
+                if ($rootScope.config.liveVideoId)
+                    $rootScope.player.loadVideoById($rootScope.config.liveVideoId);
+                else if (count === 0)
+                    $rootScope.player.loadVideoById(vm.currentClip.snippet.resourceId.videoId, 0);
             });
         }
     }

@@ -1,0 +1,5 @@
+{
+    "clientPort": 80,
+    "socketPort": 81,
+    "host": "localhost"
+}

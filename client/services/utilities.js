@@ -1,14 +1,23 @@
 (function(app) {
     app.service('UtilitiesSVC', UtilitiesSVC);
-    UtilitiesSVC.$inject = ["$q"];
+    UtilitiesSVC.$inject = ["$http", "$q", "$websocket"];
 
-    function UtilitiesSVC($q) {
-
+    function UtilitiesSVC($http, $q, $websocket) {
 
         return {
             addHypercomments: addHypercomments,
-            initPlayer: initPlayer
+            initPlayer: initPlayer,
+            getWebsocket: getWebsocket,
+            getConfig: getConfig
         };
+
+        function getConfig() {
+            var param = {
+                method: "POST",
+                url: "http://localhost/webinar/getConfig"
+            }
+            return $http(param);
+        }
 
         function addHypercomments() {
             window._hcwp = window._hcwp || [];
@@ -39,6 +48,12 @@
             function onYouTubeIframeAPIReady() {
                 deferred.resolve(true);
             }
+        }
+
+        function getWebsocket(method) {
+            // Open a WebSocket connection
+            return $websocket('ws://localhost:81/webinar/switchStatus');
+
         }
     }
 })(angular.module('bbWebinar'));

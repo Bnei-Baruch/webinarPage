@@ -6,20 +6,25 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "del": "",
-    "gulp-autoprefixer": "",
-    "gulp-cache": "",
-    "gulp-concat": "",
-    "gulp-cssnano": "",
-    "gulp-imagemin": "",
-    "gulp-jshint": "^2.0.0",
-    "gulp-livereload": "",
-    "gulp-notify": "",
-    "gulp-rename": "",
-    "gulp-uglify": "",
-    "jshint": "^2.9.1"
+  "dependencies": {
+    "del": "*",
+    "debug": "^2.2.0",
+    "gulp": "^3.9.1"
+    "gulp-autoprefixer": "*",
+    "gulp-cache": "*",
+    "gulp-concat": "*",
+    "gulp-cssnano": "*",
+    "gulp-imagemin": "*",
+    "gulp-jshint": "*",
+    "gulp-livereload": "*",
+    "gulp-notify": "*",
+    "gulp-rename": "*",
+    "gulp-uglify": "*",
+    "jshint": "*",
+    "express": "*",
+    "nodemon": "*",
+    "sqlite3": "*",
+    "fs": "*",
+    "ws": "^1.0.1"
   }
 }

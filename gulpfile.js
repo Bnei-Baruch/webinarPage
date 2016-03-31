@@ -1,5 +1,3 @@
-
-
 // Load plugins
 var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
@@ -11,79 +9,84 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     cache = require('gulp-cache'),
     livereload = require('gulp-livereload'),
-    del = require('del');
+    del = require('del'),
+    nodemon = require('gulp-nodemon');
 
 // Styles
 gulp.task('styles', function() {
-  return gulp.src('src/**/*.css')
-    .pipe(gulp.dest('app/styles'))
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(cssnano())
-    .pipe(gulp.dest('app/styles'))
-    .pipe(notify({ message: 'Styles task complete' }));
+    return gulp.src('client/**/*.css')
+        .pipe(gulp.dest('app/styles'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(cssnano())
+        .pipe(gulp.dest('app/styles'))
+        .pipe(notify({ message: 'Styles task complete' }));
 });
 
 // Scripts
-gulp.task('scripts', function() {    
-  return gulp.src(['src/app.js', 'src/services/*.js', 'src/controllers/*.js','src/lib/*.js'])
-    //.pipe(jshint('.jshintrc'))
-    //.pipe(jshint.reporter('default'))
-    .pipe(concat('main.js'))
-    .pipe(gulp.dest('app/scripts'))
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(uglify())
-    .pipe(gulp.dest('app/scripts'))
-    .pipe(notify({ message: 'Scripts task complete' }));
+gulp.task('scripts', function() {
+    return gulp.src(['client/app.js', 'client/services/*.js', 'client/controllers/*.js', 'client/lib/*.js'])
+        //.pipe(jshint('.jshintrc'))
+        //.pipe(jshint.reporter('default'))
+        .pipe(concat('main.js'))
+        .pipe(gulp.dest('app/scripts'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
+        .pipe(gulp.dest('app/scripts'))
+        .pipe(notify({ message: 'Scripts task complete' }));
 });
 
 // Images
 gulp.task('images', function() {
-  return gulp.src('src/images/**/*')
-    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('app/images'))
-    .pipe(notify({ message: 'Images task complete' }));
+    return gulp.src('client/images/**/*')
+        .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
+        .pipe(gulp.dest('app/images'))
+        .pipe(notify({ message: 'Images task complete' }));
 });
 
 // Templates
 gulp.task('views', function() {
-  return gulp.src('src/viewes/**/*')
-    .pipe(gulp.dest('app/views'))
-    .pipe(notify({ message: 'Views task complete' }));
+    return gulp.src('client/viewes/**/*')
+        .pipe(gulp.dest('app/views'))
+        .pipe(notify({ message: 'Views task complete' }));
 });
 
 // config
-gulp.task('config', function() {
-  return gulp.src('src/config.json')
-    .pipe(gulp.dest('app'))
-    .pipe(notify({ message: 'Configuration task complete' }));
+gulp.task('index', function() {
+    return gulp.src('client/index.html').pipe(gulp.dest('app'));
 });
 
 // Clean
 gulp.task('clean', function() {
-  return del(['app/styles', 'app/scripts', 'app/images','app/views', 'app/config.json' ]);
+    return del(['app']);
 });
 
 // Default task
 gulp.task('default', ['clean'], function() {
-  gulp.start('styles', 'views', 'scripts', 'images', 'config');
+    gulp.start('styles', 'views', 'scripts', 'images', 'index');
 });
 
 // Watch
 gulp.task('watch', function() {
 
-  // Watch .scss files
-  gulp.watch('src/styles/**/*.css', ['styles']);
+    // Watch .scss files
+    gulp.watch('client/styles/**/*.css', ['styles']);
 
-  // Watch .js files
-  gulp.watch('src/scripts/**/*.js', ['scripts']);
+    // Watch .js files
+    gulp.watch('client/scripts/**/*.js', ['scripts']);
 
-  // Watch image files
-  gulp.watch('src/images/**/*', ['images']);
+    // Watch image files
+    gulp.watch('client/images/**/*', ['images']);
 
-  // Create LiveReload server
-  livereload.listen();
+    // Create LiveReload server
+    livereload.listen();
 
-  // Watch any files in app/, reload on change
-  gulp.watch(['app/**']).on('change', livereload.changed);
+    // Watch any files in app/, reload on change
+    gulp.watch(['app/**']).on('change', livereload.changed);
 
 });
+
+gulp.task('server', function () {
+  nodemon({
+    script: './server/index.js'
+  })
+})
