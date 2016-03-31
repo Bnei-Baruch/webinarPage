@@ -20,6 +20,7 @@
     "gulp-notify": "*",
     "gulp-rename": "*",
     "gulp-uglify": "*",
+    "connect": "*",
     "cookie-parser": "*",
     "cookie-session": "*",
     "jshint": "*",
