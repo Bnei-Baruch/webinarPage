@@ -3,3 +3,6 @@ node_modules
 
 #prodaction
 app/*
+
+#congif
+config.json
