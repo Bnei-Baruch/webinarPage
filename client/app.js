@@ -6,6 +6,10 @@
      */
     angular
         .module('bbWebinar', ["ngWebSocket"])
+        .constant("webConfig", {
+            "host": "http://localhost/webinar/",
+            "wsHost": "ws://localhost:81/webinar/switchStatus"
+        })
         .run(function($rootScope, UtilitiesSVC) {
             $rootScope.config = {};
             UtilitiesSVC.getConfig().then(function(r) {

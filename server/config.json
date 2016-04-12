@@ -1,5 +1,10 @@
 {
     "clientPort": 80,
     "socketPort": 81,
-    "host": "localhost"
+    "host": "localhost",
+    "admin": {
+        "pass": "12345",
+        "name": "admin",
+        "secret": "cff12ca46c83b0d71789a9074c047927"
+    }
 }

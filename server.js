@@ -97,9 +97,6 @@ routerAdmin.post('/getConfig', function(req, res) {
     });
 });
 
-
-
-
 app.use("/webinar/", router);
 app.use("/webinar/admin", routerAdmin);
 app.listen(global.WEBINAR_CONFIG.clientPort);

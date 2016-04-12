@@ -5,7 +5,7 @@ var db = require('./callDB');
 
 var WebSocketServer = require('ws').Server;
 var wsServer = new WebSocketServer({
-    host: "localhost",
+    host: global.WEBINAR_CONFIG.host,
     port: global.WEBINAR_CONFIG.socketPort,
     path: "/webinar/switchStatus"
 });
