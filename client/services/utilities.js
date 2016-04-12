@@ -17,11 +17,11 @@
                 return $http(param);
             }
 
-            function addHypercomments() {
+            function addHypercomments(id) {
                 window._hcwp = window._hcwp || [];
                 window._hcwp.push({
                     widget: "Stream",
-                    widget_id: 68039
+                    widget_id: id
                 });
 
                 if ("HC_LOAD_INIT" in window) return;
@@ -30,7 +30,7 @@
                 var hcc = document.createElement("script");
                 hcc.type = "text/javascript";
                 hcc.async = true;
-                hcc.src = ("https:" == document.location.protocol ? "https" : "http") + "://w.hypercomments.com/widget/hc/68039/" + lang + "/widget.js";
+                hcc.src = ("https:" == document.location.protocol ? "https" : "http") + "://w.hypercomments.com/widget/hc/" + id + "/" + lang + "/widget.js";
                 var s = document.getElementsByTagName("script")[0];
                 s.parentNode.insertBefore(hcc, s.nextSibling);
             }

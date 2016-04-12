@@ -4,11 +4,11 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css.css">
+    <link rel="stylesheet" href="./admin/css.css">
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="//code.angularjs.org/1.3.14/angular.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="./main.js"></script>
+    <script src="./admin/main.js"></script>
 </head>
 
 <body>
@@ -57,6 +57,10 @@
                         <div class="clearfix">
                             <label class="col-xs-4">Live start time</label>
                             <input class="col-xs-8" type="datetime-local" ng-model="config.sendData.liveStart" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Chat Id:</label>
+                            <input class="col-xs-8" type="text" ng-model="config.sendData.chatId" required />
                         </div>
                     </div>
                     <div class="panel-footer">

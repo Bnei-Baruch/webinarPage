@@ -6,3 +6,6 @@ app/*
 
 #congif
 config.json
+
+#Data base file
+*.db
