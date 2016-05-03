@@ -50,8 +50,7 @@
                 YoutubeSVC.getVideoById($rootScope.config.liveVideoId).then(function(item) {
                     var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
                     vm.currentClip = item;
-                    if ($rootScope.config.videoTitle)
-                        vm.currentClip.snippet.title = $rootScope.config.videoTitle;
+                    _setVideoParamFromConfig();
                 });
                 $rootScope.player.loadVideoById($rootScope.config.liveVideoId);
             }
@@ -65,17 +64,25 @@
                 YoutubeSVC.getVideoById($rootScope.config.liveVideoId).then(function(item) {
                     var delta = $rootScope.config.clipStartIn - _getUTCTimeNow();
                     vm.currentClip = item;
+                    _setVideoParamFromConfig();
                     vm.counter = {
-                        url: $rootScope.config.timerImg || item.snippet.thumbnails.high.url,
+                        url: $rootScope.config.imgWaitUrl || item.snippet.thumbnails.maxres.url,
                         timer: _getDateBindObj(delta)
                     };
                     _runIncreaseCount();
                 });
             }
 
+
             function _switchToPlayListMode() {
                 vm.playerMode = "playlist";
                 loadPage(null, 0, 0);
+            }
+
+
+            function _setVideoParamFromConfig(){
+                if ($rootScope.config.videoTitle)
+                    vm.currentClip.snippet.title = $rootScope.config.videoTitle;
             }
 
             function _getUTCTimeNow() {

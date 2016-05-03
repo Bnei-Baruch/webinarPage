@@ -7,7 +7,13 @@
             </h3>
             <h5>
                 <span class="label label-primary">дата и время</span>
-                {{$root.config.clipStartIn | date: 'd MMMM, HH:mm'}}
+                {{$root.config.clipStartIn | date: 'd MMMM'}}
+                <span ng-if="!$root.config.liveStartText">                    
+                    {{$root.config.clipStartIn | date: 'HH:mm'}}
+                </span>
+                <span ng-if="$root.config.liveStartText">                    
+                    {{$root.config.liveStartText}}
+                </span>
             </h5>
         </div>
     </div>

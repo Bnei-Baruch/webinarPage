@@ -4,11 +4,11 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./admin/css.css">
+    <link rel="stylesheet" href="./css.css">
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src="//code.angularjs.org/1.3.14/angular.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="./admin/main.js"></script>
+    <script src="./main.js"></script>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="btn-group">
-                        <button class="btn btn-primary" ng-class="status.type == switch.statusSel.type? ' active': ''" ng-repeat="status in switch.statusRadio"  ng-click="switch.setStatus(status)">
+                        <button class="btn btn-primary" ng-class="status.type == switch.statusSel.type? ' active': ''" ng-repeat="status in switch.statusRadio" ng-click="switch.setStatus(status)">
                             {{status.type}}
                         </button>
                     </div>
@@ -57,6 +57,10 @@
                         <div class="clearfix">
                             <label class="col-xs-4">Live start time</label>
                             <input class="col-xs-8" type="datetime-local" ng-model="config.sendData.liveStart" required />
+                        </div>
+                        <div class="clearfix">
+                            <label class="col-xs-4">Show time as text</label>
+                            <input type="text" class="col-xs-8" ng-model="config.sendData.liveStartText"/>
                         </div>
                         <div class="clearfix">
                             <label class="col-xs-4">Chat Id:</label>
