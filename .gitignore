@@ -5,7 +5,7 @@ node_modules
 app/*
 
 #congif
-config.json
+**/config.json
 
 #Data base file
-*.db
+**/*.db
