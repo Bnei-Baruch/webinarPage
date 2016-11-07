@@ -2,10 +2,12 @@
 node_modules
 
 #prodaction
-app/*
+app/
 
 #congif
 **/config.json
 
 #Data base file
 **/*.db
+
+.idea/
